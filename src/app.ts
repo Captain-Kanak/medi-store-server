@@ -8,6 +8,7 @@ import { medicineRouter } from "./modules/medicine/medicine.route";
 import errorHandler from "./middleware/error-handler";
 import { categoryRouter } from "./modules/category/category.route";
 import { orderRouter } from "./modules/order/order.route";
+import { reviewRouter } from "./modules/review/review.route";
 
 export const app: Application = express();
 
@@ -42,6 +43,8 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/medicines", medicineRouter);
 
 app.use("/api/orders", orderRouter);
+
+app.use("/api/reviews", reviewRouter);
 // ------ *** ------
 
 app.use(notFound);

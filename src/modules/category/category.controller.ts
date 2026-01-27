@@ -15,6 +15,10 @@ const addCategory = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     console.log(error);
 
+    if (error instanceof AppError) {
+      throw error;
+    }
+
     next(error);
   }
 };
