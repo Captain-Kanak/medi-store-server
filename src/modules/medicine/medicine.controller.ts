@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { medicineService } from "./medicine.service";
 import { AppError } from "@/src/utils/AppError";
 import { paginationHelper } from "@/src/utils/paginationHelper";
+import { sortingHelper } from "@/src/utils/sortingHelper";
 
 const addMedicine = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
@@ -50,8 +51,9 @@ const getMedicines = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { search, page, limit } = req.query;
+  const { search, page, limit, price, sortBy, sortOrder } = req.query;
   const trimmedSearch = search ? (search as string).trim() : "";
+  const numberPrice = price ? Number(price) : 0;
 
   try {
     const pagination = paginationHelper({
@@ -59,10 +61,18 @@ const getMedicines = async (
       limit: limit as string,
     });
 
+    const sorting = sortingHelper({
+      sortBy: sortBy as string,
+      sortOrder: sortOrder as "asc" | "desc",
+    });
+
     const result = await medicineService.getMedicines({
       limit: pagination.limit,
       offset: pagination.offset,
       search: trimmedSearch as string,
+      price: numberPrice as number,
+      sortBy: sorting.sortBy,
+      sortOrder: sorting.sortOrder,
     });
 
     return res.status(200).json(result);

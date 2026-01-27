@@ -6,6 +6,9 @@ interface QueryInput {
   limit: number;
   offset: number;
   search?: string;
+  price?: number;
+  sortBy: string;
+  sortOrder: "asc" | "desc";
 }
 
 const addMedicine = async (payload: Omit<Medicine, "id">, sellerId: string) => {
@@ -29,7 +32,14 @@ const addMedicine = async (payload: Omit<Medicine, "id">, sellerId: string) => {
   }
 };
 
-const getMedicines = async ({ limit, offset, search }: QueryInput) => {
+const getMedicines = async ({
+  limit,
+  offset,
+  search,
+  price,
+  sortBy,
+  sortOrder,
+}: QueryInput) => {
   try {
     const andConditions: Prisma.MedicineWhereInput[] = [];
 
@@ -58,12 +68,25 @@ const getMedicines = async ({ limit, offset, search }: QueryInput) => {
       });
     }
 
+    if (price) {
+      andConditions.push({
+        price: {
+          gte: price,
+        },
+      });
+    }
+
     const result = await prisma.medicine.findMany({
       skip: offset,
       take: limit,
       where: {
         AND: andConditions,
       },
+      orderBy: [
+        {
+          [sortBy]: sortOrder,
+        },
+      ],
       include: {
         seller: {
           select: {
