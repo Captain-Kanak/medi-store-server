@@ -31,5 +31,8 @@ model OrderItem {
     medicineId String
     medicine   Medicine @relation(fields: [medicineId], references: [id])
 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
     @@map("order_item")
 }

@@ -4,8 +4,9 @@ model Category {
   description String?
   image       String?
   medicines   Medicine[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("category")
 }

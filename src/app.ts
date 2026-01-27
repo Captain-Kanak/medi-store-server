@@ -1,8 +1,20 @@
+import { toNodeHandler } from "better-auth/node";
 import express, { Application, json, Request, Response } from "express";
+import cors from "cors";
+import { auth } from "./lib/auth";
+import { notFound } from "./middleware/not-found";
+import { envConfig } from "./config/envConfig";
 
 export const app: Application = express();
 
 app.use(json());
+
+app.use(
+  cors({
+    origin: [envConfig.origin_url as string, "http://localhost:3000"],
+    credentials: true,
+  }),
+);
 
 app.get("/", (req: Request, res: Response) => {
   return res.status(200).json({
@@ -14,19 +26,13 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/api", (req: Request, res: Response) => {
   return res.status(200).json({
     success: true,
-    message: "Medi Store API Route",
+    message: "Welcome to Medi Store API Route",
   });
 });
 
 // ------ *** ------
+app.all("/api/auth/*splat", toNodeHandler(auth));
 
 // ------ *** ------
 
-// not found route handler
-app.use((req: Request, res: Response) => {
-  return res.status(404).json({
-    success: false,
-    message: "Not Found",
-    route: req.originalUrl,
-  });
-});
+app.use(notFound);
