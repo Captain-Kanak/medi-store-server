@@ -1,9 +1,8 @@
 import { prisma } from "@/src/lib/prisma";
 import { AppError } from "@/src/utils/AppError";
-import { Medicine } from "@prisma/client";
+import { Medicine, Prisma } from "@prisma/client";
 
 interface QueryInput {
-  page: number;
   limit: number;
   offset: number;
   search?: string;
@@ -30,29 +29,29 @@ const addMedicine = async (payload: Omit<Medicine, "id">, sellerId: string) => {
   }
 };
 
-const getMedicines = async ({ page, limit, offset, search }: QueryInput) => {
-  console.log({ page, limit, offset, search });
+const getMedicines = async ({ limit, offset, search }: QueryInput) => {
   try {
-    const andConditions = [];
+    const andConditions: Prisma.MedicineWhereInput[] = [];
 
     if (search) {
       andConditions.push({
         OR: [
           {
-            title: {
+            name: {
               contains: search as string,
               mode: "insensitive",
             },
           },
           {
-            content: {
+            brand: {
               contains: search as string,
               mode: "insensitive",
             },
           },
           {
-            tags: {
-              has: search as string,
+            description: {
+              contains: search as string,
+              mode: "insensitive",
             },
           },
         ],
@@ -62,9 +61,21 @@ const getMedicines = async ({ page, limit, offset, search }: QueryInput) => {
     const result = await prisma.medicine.findMany({
       skip: offset,
       take: limit,
+      where: {
+        AND: andConditions,
+      },
       include: {
-        seller: true,
-        category: true,
+        seller: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
 
@@ -76,7 +87,6 @@ const getMedicines = async ({ page, limit, offset, search }: QueryInput) => {
       total: result.length,
       data: result,
       pagination: {
-        page,
         limit,
         offset,
         total,

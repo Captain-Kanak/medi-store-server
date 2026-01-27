@@ -51,21 +51,18 @@ const getMedicines = async (
   next: NextFunction,
 ) => {
   const { search, page, limit } = req.query;
+  const trimmedSearch = search ? (search as string).trim() : "";
 
-  console.log({ search });
   try {
     const pagination = paginationHelper({
       page: page as string,
       limit: limit as string,
     });
 
-    console.log(pagination);
-
     const result = await medicineService.getMedicines({
-      page: pagination.page,
       limit: pagination.limit,
       offset: pagination.offset,
-      search: search as string,
+      search: trimmedSearch as string,
     });
 
     return res.status(200).json(result);
