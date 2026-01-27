@@ -18,7 +18,17 @@ const getMedicines = async () => {
   }
 };
 
+const getMedicine = async () => {
+  try {
+  } catch (error) {
+    console.log(error);
+
+    throw new AppError("Failed to get medicine", 500);
+  }
+};
+
 export const medicineService = {
   addMedicine,
   getMedicines,
+  getMedicine,
 };
