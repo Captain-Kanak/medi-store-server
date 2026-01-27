@@ -102,6 +102,14 @@ const getMedicines = async ({
       },
     });
 
+    if (!result.length) {
+      return {
+        success: true,
+        message: "No medicines found",
+        data: result,
+      };
+    }
+
     const total = await prisma.medicine.count();
 
     return {

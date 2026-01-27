@@ -43,12 +43,17 @@ const getCategories = async () => {
       },
     });
 
-    const total = await prisma.category.count();
+    if (!result.length) {
+      return {
+        success: true,
+        message: "No categories found",
+        data: result,
+      };
+    }
 
     return {
       success: true,
       message: "Categories fetched successfully",
-      total,
       data: result,
     };
   } catch (error) {

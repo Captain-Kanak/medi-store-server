@@ -19,7 +19,7 @@ const addMedicine = async (req: Request, res: Response, next: NextFunction) => {
   } = req.body;
   try {
     if (!user) {
-      throw new AppError("User not found", 404);
+      throw new AppError("Unauthorized", 401);
     }
 
     if (
