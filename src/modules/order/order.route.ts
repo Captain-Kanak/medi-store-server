@@ -11,4 +11,10 @@ router.post(
   orderController.createOrder,
 );
 
+router.patch(
+  "/:id",
+  authMiddleware(UserRoles.SELLER, UserRoles.CUSTOMER),
+  orderController.updateOrderStatus,
+);
+
 export { router as orderRouter };
