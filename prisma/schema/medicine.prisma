@@ -1,0 +1,24 @@
+model Medicine {
+    id          String   @id @default(cuid())
+    name        String
+    brand       String
+    price       Float
+    stock       Int
+    description String
+    image       String
+    dosage      String?
+    expiryDate  DateTime
+
+    categoryId String
+    category   Category @relation(fields: [categoryId], references: [id])
+    sellerId   String
+    seller     User     @relation(fields: [sellerId], references: [id])
+
+    orderItems OrderItem[]
+    reviews    Review[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("medicine")
+}
