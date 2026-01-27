@@ -1,7 +1,26 @@
+import { prisma } from "@/src/lib/prisma";
 import { AppError } from "@/src/utils/AppError";
 
-const addCategory = async () => {
+const addCategory = async ({
+  name,
+  description,
+}: {
+  name: string;
+  description?: string;
+}) => {
   try {
+    const result = await prisma.category.create({
+      data: {
+        name,
+        ...(description && { description }),
+      },
+    });
+
+    return {
+      success: true,
+      message: "Category added successfully",
+      data: result,
+    };
   } catch (error) {
     console.log(error);
 
@@ -11,6 +30,27 @@ const addCategory = async () => {
 
 const getCategories = async () => {
   try {
+    const result = await prisma.category.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        _count: {
+          select: {
+            medicines: true,
+          },
+        },
+      },
+    });
+
+    const total = await prisma.category.count();
+
+    return {
+      success: true,
+      message: "Categories fetched successfully",
+      total,
+      data: result,
+    };
   } catch (error) {
     console.log(error);
 

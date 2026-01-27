@@ -15,7 +15,7 @@ function errorHandler(
     message = err.message;
   }
 
-  res.status(statusCode).json({
+  return res.status(statusCode).json({
     success: false,
     message,
     ...(process.env.NODE_ENV === "development" && {

@@ -13,6 +13,7 @@ model User {
     role          String?    @default("CUSTOMER")
     phone         String?
     address       String?
+    isBlocked     Boolean?   @default(false)
     sessions      Session[]
     accounts      Account[]
     medicines     Medicine[]

@@ -35,6 +35,11 @@ export const auth = betterAuth({
         type: "string",
         required: false,
       },
+      isBlocked: {
+        type: "boolean",
+        defaultValue: false,
+        required: false,
+      },
     },
   },
   emailAndPassword: {
