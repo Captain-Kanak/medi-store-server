@@ -6,7 +6,7 @@ model Medicine {
     stock       Int
     description String
     image       String
-    dosage      String?
+    dosage      String
     expiryDate  DateTime
     categoryId  String
     category    Category    @relation(fields: [categoryId], references: [id])
@@ -18,5 +18,6 @@ model Medicine {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    @@unique([name, brand, sellerId])
     @@map("medicine")
 }

@@ -5,8 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/server.ts",
     "dev": "tsx watch src/server.ts",
-    "seed:admin": "tsx src/utils/seedAdmin.ts"
+    "seed:admin": "tsx src/utils/seedAdmin.ts",
+    "seed": "tsx src/utils/seed.ts"
   },
   "keywords": [],
   "author": "Kanak",

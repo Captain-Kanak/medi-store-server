@@ -36,10 +36,9 @@ app.get("/api", (req: Request, res: Response) => {
 // ------ *** ------
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
-app.use("/api/medicines", medicineRouter);
-
 app.use("/api/categories", categoryRouter);
 
+app.use("/api/medicines", medicineRouter);
 // ------ *** ------
 
 app.use(notFound);
