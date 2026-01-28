@@ -8,6 +8,7 @@ model Review {
     medicine   Medicine @relation(fields: [medicineId], references: [id])
 
     createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     @@map("review")
 }

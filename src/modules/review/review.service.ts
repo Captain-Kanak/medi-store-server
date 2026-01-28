@@ -28,4 +28,41 @@ const createReview = async (payload: Review, customerId: string) => {
   }
 };
 
-export const reviewService = { createReview };
+const updateReview = async (
+  payload: Review,
+  id: string,
+  customerId: string,
+) => {
+  try {
+    const review = await prisma.review.findUnique({
+      where: { id, customerId },
+    });
+
+    if (!review) {
+      throw new AppError("Review not found or you don't have permission", 404);
+    }
+
+    const result = await prisma.review.update({
+      where: { id, customerId },
+      data: {
+        rating: payload.rating,
+        comment: payload.comment,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Review updated successfully",
+      data: result,
+    };
+  } catch (error) {
+    console.log(error);
+
+    throw new AppError("Failed to update review", 500);
+  }
+};
+
+export const reviewService = {
+  createReview,
+  updateReview,
+};

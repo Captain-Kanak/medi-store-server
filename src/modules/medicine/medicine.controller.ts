@@ -55,7 +55,8 @@ const getMedicines = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { search, page, limit, price, sortBy, sortOrder } = req.query;
+  const { search, page, limit, price, sortBy, sortOrder, categoryId } =
+    req.query;
   const trimmedSearch = search ? (search as string).trim() : "";
   const numberPrice = price ? Number(price) : 0;
 
@@ -74,6 +75,7 @@ const getMedicines = async (
       limit: pagination.limit,
       offset: pagination.offset,
       search: trimmedSearch as string,
+      categoryId: categoryId as string,
       price: numberPrice as number,
       sortBy: sorting.sortBy,
       sortOrder: sorting.sortOrder,

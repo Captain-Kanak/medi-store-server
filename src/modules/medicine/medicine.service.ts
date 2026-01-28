@@ -6,6 +6,7 @@ interface QueryInput {
   limit: number;
   offset: number;
   search?: string;
+  categoryId?: string;
   price?: number;
   sortBy: string;
   sortOrder: "asc" | "desc";
@@ -45,6 +46,7 @@ const getMedicines = async ({
   limit,
   offset,
   search,
+  categoryId,
   price,
   sortBy,
   sortOrder,
@@ -82,6 +84,12 @@ const getMedicines = async ({
         price: {
           gte: price,
         },
+      });
+    }
+
+    if (categoryId) {
+      andConditions.push({
+        categoryId,
       });
     }
 

@@ -162,13 +162,13 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 
 ### Medicine
 
-| Method | Endpoint           | Access | Description           |
-| ------ | ------------------ | ------ | --------------------- |
-| POST   | /api/medicines     | SELLER | Add Medicine          |
-| GET    | /api/medicines     | Public | Get all Medicines     |
-| GET    | /api/medicines/:id | Public | Get Medicine by id    |
-| PATCH  | /api/medicines/:id | SELLER | Update Medicine by id |
-| DELETE | /api/medicines/:id | SELLER | Delete Medicine by id |
+| Method | Endpoint           | Access         | Description           |
+| ------ | ------------------ | -------------- | --------------------- |
+| POST   | /api/medicines     | SELLER         | Add Medicine          |
+| GET    | /api/medicines     | Public         | Get all Medicines     |
+| GET    | /api/medicines/:id | Public         | Get Medicine by id    |
+| PATCH  | /api/medicines/:id | SELLER / ADMIN | Update Medicine by id |
+| DELETE | /api/medicines/:id | SELLER / ADMIN | Delete Medicine by id |
 
 ---
 
@@ -176,6 +176,7 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 
 | Method | Endpoint        | Access           | Description               |
 | ------ | --------------- | ---------------- | ------------------------- |
+| GET    | /api/orders     | ADMIN            | Get all Orders            |
 | POST   | /api/orders     | CUSTOMER         | Place Order               |
 | PATCH  | /api/orders/:id | CUSTOMER /SELLER | Update Order Status by id |
 
@@ -183,9 +184,10 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 
 ### Review
 
-| Method | Endpoint     | Access   | Description               |
-| ------ | ------------ | -------- | ------------------------- |
-| POST   | /api/reviews | CUSTOMER | Leave Review for Medicine |
+| Method | Endpoint         | Access   | Description               |
+| ------ | ---------------- | -------- | ------------------------- |
+| POST   | /api/reviews     | CUSTOMER | Leave Review for Medicine |
+| PATCH  | /api/reviews/:id | CUSTOMER | Update Review by id       |
 
 ---
 

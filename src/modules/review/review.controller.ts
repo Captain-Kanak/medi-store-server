@@ -35,4 +35,33 @@ const createReview = async (
   }
 };
 
-export const reviewController = { createReview };
+const updateReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const id = req.params.id as string;
+  const user = req.user;
+  try {
+    if (!user) {
+      throw new AppError("Unauthorized", 401);
+    }
+
+    const result = await reviewService.updateReview(req.body, id, user.id);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    next(error);
+  }
+};
+
+export const reviewController = {
+  createReview,
+  updateReview,
+};

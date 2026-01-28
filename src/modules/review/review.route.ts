@@ -11,4 +11,10 @@ router.post(
   reviewController.createReview,
 );
 
+router.patch(
+  "/:id",
+  authMiddleware(UserRoles.CUSTOMER),
+  reviewController.updateReview,
+);
+
 export { router as reviewRouter };
