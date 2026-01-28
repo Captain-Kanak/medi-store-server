@@ -1,6 +1,8 @@
-import { prisma } from "@/src/lib/prisma";
-import { AppError } from "@/src/utils/AppError";
-import { OrderStatus, Prisma, User, UserRoles } from "@prisma/client";
+
+import type { User } from "@prisma/client";
+import { OrderStatus, Prisma, UserRoles } from "@prisma/client";
+import { prisma } from "../../lib/prisma.js";
+import { AppError } from "../../utils/AppError.js";
 
 interface Order {
   totalPrice: number;

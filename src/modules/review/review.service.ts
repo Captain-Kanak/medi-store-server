@@ -1,5 +1,5 @@
-import { prisma } from "@/src/lib/prisma";
-import { AppError } from "@/src/utils/AppError";
+import { prisma } from "../../lib/prisma.js";
+import { AppError } from "../../utils/AppError.js";
 
 interface Review {
   rating: number;

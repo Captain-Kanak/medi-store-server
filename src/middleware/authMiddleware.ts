@@ -1,6 +1,6 @@
 import { UserRoles } from "@prisma/client";
-import { auth } from "../lib/auth";
-import { AppError } from "../utils/AppError";
+import { auth } from "../lib/auth.js";
+import { AppError } from "../utils/AppError.js";
 
 export const authMiddleware = (...roles: UserRoles[]) => {
   return async (req: any, res: any, next: any) => {

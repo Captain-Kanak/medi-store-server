@@ -1,18 +1,19 @@
 import { toNodeHandler } from "better-auth/node";
-import express, { Application, json, Request, Response } from "express";
+import type { Application, Request, Response } from "express";
+import express from "express";
 import cors from "cors";
-import { auth } from "./lib/auth";
-import { notFound } from "./middleware/not-found";
-import { envConfig } from "./config/envConfig";
-import { medicineRouter } from "./modules/medicine/medicine.route";
-import errorHandler from "./middleware/error-handler";
-import { categoryRouter } from "./modules/category/category.route";
-import { orderRouter } from "./modules/order/order.route";
-import { reviewRouter } from "./modules/review/review.route";
+import { auth } from "./lib/auth.js";
+import { notFound } from "./middleware/not-found.js";
+import { envConfig } from "./config/envConfig.js";
+import { medicineRouter } from "./modules/medicine/medicine.route.js";
+import errorHandler from "./middleware/error-handler.js";
+import { categoryRouter } from "./modules/category/category.route.js";
+import { orderRouter } from "./modules/order/order.route.js";
+import { reviewRouter } from "./modules/review/review.route.js";
 
-export const app: Application = express();
+const app: Application = express();
 
-app.use(json());
+app.use(express.json());
 
 app.use(
   cors({
@@ -50,3 +51,5 @@ app.use("/api/reviews", reviewRouter);
 app.use(notFound);
 
 app.use(errorHandler);
+
+export default app;

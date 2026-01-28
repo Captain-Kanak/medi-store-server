@@ -1,5 +1,5 @@
 import { UserRoles } from "@prisma/client";
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 
 async function seedAdmin() {
   try {

@@ -1,8 +1,9 @@
-import { NextFunction, Request, Response } from "express";
-import { medicineService } from "./medicine.service";
-import { AppError } from "@/src/utils/AppError";
-import { paginationHelper } from "@/src/utils/paginationHelper";
-import { sortingHelper } from "@/src/utils/sortingHelper";
+import type { NextFunction, Request, Response } from "express";
+import { medicineService } from "./medicine.service.js";
+import { paginationHelper } from "../../utils/paginationHelper.js";
+import { sortingHelper } from "../../utils/sortingHelper.js";
+import { AppError } from "../../utils/AppError.js";
+
 
 const addMedicine = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;

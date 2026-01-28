@@ -3,6 +3,10 @@
 import { defineConfig } from "prisma/config";
 import { envConfig } from "./src/config/envConfig";
 
+if (!envConfig.dbUrl) {
+  throw new Error("DATABASE_URL is not defined");
+}
+
 export default defineConfig({
   schema: "prisma/schema",
   migrations: {

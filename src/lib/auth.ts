@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "./prisma";
-import { envConfig } from "../config/envConfig";
+import { prisma } from "./prisma.js";
+import { envConfig } from "../config/envConfig.js";
 import { UserRoles } from "@prisma/client";
 import nodemailer from "nodemailer";
 

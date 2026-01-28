@@ -1,6 +1,7 @@
-import { prisma } from "@/src/lib/prisma";
-import { AppError } from "@/src/utils/AppError";
-import { Medicine, Prisma, User, UserRoles } from "@prisma/client";
+import type { Medicine, Prisma, User } from "@prisma/client";
+import { UserRoles } from "@prisma/client";
+import { prisma } from "../../lib/prisma.js";
+import { AppError } from "../../utils/AppError.js";
 
 interface QueryInput {
   limit: number;
