@@ -1,5 +1,5 @@
 model Medicine {
-    id          String      @id @default(cuid())
+    id          String      @id @default(uuid())
     name        String
     brand       String
     price       Float

@@ -88,8 +88,11 @@ const getMedicines = async (
 };
 
 const getMedicine = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
   try {
-    const result = await medicineService.getMedicine();
+    const result = await medicineService.getMedicine(id as string);
+
+    return res.status(200).json(result);
   } catch (error) {
     console.log(error);
 
@@ -97,8 +100,15 @@ const getMedicine = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const updateMedicine = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {};
+
 export const medicineController = {
   addMedicine,
   getMedicines,
   getMedicine,
+  updateMedicine,
 };

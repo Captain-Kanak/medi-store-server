@@ -15,11 +15,11 @@ router.get("/", medicineController.getMedicines);
 
 router.get("/:id", medicineController.getMedicine);
 
-// router.patch(
-//   "/:id",
-//   authMiddleware(UserRoles.SELLER),
-//   medicineController.updateMedicine,
-// );
+router.patch(
+  "/:id",
+  authMiddleware(UserRoles.SELLER),
+  medicineController.updateMedicine,
+);
 
 // router.delete(
 //   "/:id",

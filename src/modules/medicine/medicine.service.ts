@@ -131,8 +131,36 @@ const getMedicines = async ({
   }
 };
 
-const getMedicine = async () => {
+const getMedicine = async (id: string) => {
   try {
+    const result = await prisma.medicine.findUnique({
+      where: { id },
+      include: {
+        seller: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!result) {
+      throw new AppError("Medicine not found", 404);
+    }
+
+    return (
+      result && {
+        success: true,
+        message: "Medicine fetched successfully",
+        data: result,
+      }
+    );
   } catch (error) {
     console.log(error);
 
@@ -140,8 +168,11 @@ const getMedicine = async () => {
   }
 };
 
+const updateMedicine = async () => {};
+
 export const medicineService = {
   addMedicine,
   getMedicines,
   getMedicine,
+  updateMedicine,
 };

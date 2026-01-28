@@ -33,19 +33,19 @@ This backend system facilitates a structured medical marketplace:
 
 ### User
 
-| Field         | Description             |
-| ------------- | ----------------------- |
-| id            | UUID (primary key)      |
-| name          | String (required)       |
-| email         | String (required)       |
-| emailVerified | Boolean (false)         |
-| image         | String?                 |
-| role          | ADMIN /SELLER /CUSTOMER |
-| phone         | String?                 |
-| address       | String?                 |
-| isBlocked     | Boolean (false)         |
-| createdAt     | Record creation time    |
-| updatedAt     | Last update time        |
+| Field         | Description               |
+| ------------- | ------------------------- |
+| id            | UUID (primary key)        |
+| name          | String (required)         |
+| email         | String (required)         |
+| emailVerified | Boolean (false)           |
+| image         | String?                   |
+| role          | ADMIN / SELLER / CUSTOMER |
+| phone         | String?                   |
+| address       | String?                   |
+| isBlocked     | Boolean (false)           |
+| createdAt     | Record creation time      |
+| updatedAt     | Last update time          |
 
 ### Category
 
@@ -77,16 +77,16 @@ This backend system facilitates a structured medical marketplace:
 
 ### Order
 
-| Field           | Description                                        |
-| --------------- | -------------------------------------------------- |
-| id              | UUID (primary key)                                 |
-| totalPrice      | Float (required)                                   |
-| status          | PENDING /PROCESSING /SHIPPED /DELIVERED /CANCELLED |
-| shippingAddress | String (required)                                  |
-| paymentMethod   | String (Cash on Delivery)                          |
-| customerId      | String (foreign key)                               |
-| createdAt       | Record creation time                               |
-| updatedAt       | Last update time                                   |
+| Field           | Description                                            |
+| --------------- | ------------------------------------------------------ |
+| id              | UUID (primary key)                                     |
+| totalPrice      | Float (required)                                       |
+| status          | PENDING / PROCESSING / SHIPPED / DELIVERED / CANCELLED |
+| shippingAddress | String (required)                                      |
+| paymentMethod   | String (Cash on Delivery)                              |
+| customerId      | String (foreign key)                                   |
+| createdAt       | Record creation time                                   |
+| updatedAt       | Last update time                                       |
 
 ### OrderItem
 
@@ -125,9 +125,9 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 
 ### Role-Based Access Control (RBAC)
 
-- **ADMIN** – Manage Categories, Block/Unblock Users, View All Orders.
-- **SELLER** – Create/Update/Delete own Medicines, Track own Sales.
-- **CUSTOMER** – Browse Medicines, Manage Profile, Place Orders.
+- **ADMIN** – Manage Categories, Block/Unblock Users, View All Orders, Manage all Inventory.
+- **SELLER** – Create/Update/Delete own Medicines, Track own Sales, View Orders, Update Order Status.
+- **CUSTOMER** – Browse Medicines, Manage Profile, Cart, Place Orders, Track Status, Leave Reviews.
 
 ---
 
