@@ -174,11 +174,11 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 
 ### Order
 
-| Method | Endpoint        | Access           | Description               |
-| ------ | --------------- | ---------------- | ------------------------- |
-| GET    | /api/orders     | ADMIN            | Get all Orders            |
-| POST   | /api/orders     | CUSTOMER         | Place Order               |
-| PATCH  | /api/orders/:id | CUSTOMER /SELLER | Update Order Status by id |
+| Method | Endpoint        | Access            | Description               |
+| ------ | --------------- | ----------------- | ------------------------- |
+| GET    | /api/orders     | ADMIN             | Get all Orders            |
+| POST   | /api/orders     | CUSTOMER          | Place Order               |
+| PATCH  | /api/orders/:id | CUSTOMER / SELLER | Update Order Status by id |
 
 ---
 
