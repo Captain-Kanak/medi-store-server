@@ -113,7 +113,7 @@ const updateMedicine = async (
       throw new AppError("Unauthorized", 401);
     }
 
-    const result = await medicineService.updateMedicine(payload, id, user.id);
+    const result = await medicineService.updateMedicine(payload, id, user);
 
     return res.status(200).json(result);
   } catch (error) {
@@ -132,9 +132,22 @@ const deleteMedicine = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const user = req.user;
+  const id = req.params.id as string;
   try {
+    if (!user) {
+      throw new AppError("Unauthorized", 401);
+    }
+
+    const result = await medicineService.deleteMedicine(id, user);
+
+    return res.status(200).json(result);
   } catch (error) {
     console.log(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
 
     next(error);
   }

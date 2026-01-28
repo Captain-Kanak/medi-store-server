@@ -17,13 +17,13 @@ router.get("/:id", medicineController.getMedicine);
 
 router.patch(
   "/:id",
-  authMiddleware(UserRoles.SELLER),
+  authMiddleware(UserRoles.SELLER, UserRoles.ADMIN),
   medicineController.updateMedicine,
 );
 
 router.delete(
   "/:id",
-  authMiddleware(UserRoles.SELLER),
+  authMiddleware(UserRoles.SELLER, UserRoles.ADMIN),
   medicineController.deleteMedicine,
 );
 

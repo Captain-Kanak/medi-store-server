@@ -1,6 +1,6 @@
 import { prisma } from "@/src/lib/prisma";
 import { AppError } from "@/src/utils/AppError";
-import { Medicine, Prisma } from "@prisma/client";
+import { Medicine, Prisma, User, UserRoles } from "@prisma/client";
 
 interface QueryInput {
   limit: number;
@@ -184,22 +184,27 @@ const getMedicine = async (id: string) => {
 const updateMedicine = async (
   payload: MedicineUpdateInput,
   id: string,
-  sellerId: string,
+  user: User,
 ) => {
   try {
+    const isAdmin = user.role === UserRoles.ADMIN;
     const { price, stock, description, image, expiryDate, categoryId } =
       payload;
 
     const medicine = await prisma.medicine.findUnique({
-      where: { id, sellerId },
+      where: { id },
     });
 
     if (!medicine) {
-      throw new AppError("Medicine not found or you are not the owner", 404);
+      throw new AppError("Medicine not found", 404);
+    }
+
+    if (!isAdmin && medicine.sellerId !== user.id) {
+      throw new AppError("Unauthorized", 401);
     }
 
     const result = await prisma.medicine.update({
-      where: { id, sellerId },
+      where: { id },
       data: {
         ...(price && { price }),
         ...(stock && { stock }),
@@ -226,8 +231,31 @@ const updateMedicine = async (
   }
 };
 
-const deleteMedicine = async (id: string, sellerId: string) => {
+const deleteMedicine = async (id: string, user: User) => {
   try {
+    const isAdmin = user.role === UserRoles.ADMIN;
+
+    const medicine = await prisma.medicine.findUnique({
+      where: { id },
+    });
+
+    if (!medicine) {
+      throw new AppError("Medicine not found", 404);
+    }
+
+    if (!isAdmin && medicine.sellerId !== user.id) {
+      throw new AppError("Unauthorized", 401);
+    }
+
+    const result = await prisma.medicine.delete({
+      where: { id },
+    });
+
+    return {
+      success: true,
+      message: "Medicine deleted successfully",
+      data: result,
+    };
   } catch (error) {
     console.log(error);
 
