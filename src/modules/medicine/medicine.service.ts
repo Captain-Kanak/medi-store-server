@@ -11,6 +11,15 @@ interface QueryInput {
   sortOrder: "asc" | "desc";
 }
 
+interface MedicineUpdateInput {
+  price?: number;
+  stock?: number;
+  description?: string;
+  image?: string;
+  expiryDate?: Date;
+  categoryId?: string;
+}
+
 const addMedicine = async (payload: Omit<Medicine, "id">, sellerId: string) => {
   try {
     const result = await prisma.medicine.create({
@@ -164,11 +173,58 @@ const getMedicine = async (id: string) => {
   } catch (error) {
     console.log(error);
 
+    if (error instanceof AppError) {
+      throw error;
+    }
+
     throw new AppError("Failed to get medicine", 500);
   }
 };
 
-const updateMedicine = async () => {};
+const updateMedicine = async (
+  payload: MedicineUpdateInput,
+  id: string,
+  sellerId: string,
+) => {
+  try {
+    const { price, stock, description, image, expiryDate, categoryId } =
+      payload;
+
+    const medicine = await prisma.medicine.findUnique({
+      where: { id, sellerId },
+    });
+
+    if (!medicine) {
+      throw new AppError("Medicine not found or you are not the owner", 404);
+    }
+
+    const result = await prisma.medicine.update({
+      where: { id, sellerId },
+      data: {
+        ...(price && { price }),
+        ...(stock && { stock }),
+        ...(description && { description }),
+        ...(image && { image }),
+        ...(expiryDate && { expiryDate }),
+        ...(categoryId && { categoryId }),
+      },
+    });
+
+    return {
+      success: true,
+      message: "Medicine updated successfully",
+      data: result,
+    };
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError("Failed to update medicine", 500);
+  }
+};
 
 export const medicineService = {
   addMedicine,
