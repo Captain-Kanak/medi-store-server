@@ -27,6 +27,33 @@ This backend system facilitates a structured medical marketplace:
 
 ---
 
+## 🔐 Authentication & Authorization
+
+### Better Auth Integration
+
+The system has moved away from manual JWT handling to Better Auth, providing:
+
+1. Session Management: Secure server-side sessions.
+2. Role Injection: User roles are baked into the session metadata.
+3. Cross-Origin Security: Built-in protection against CSRF and session hijacking.
+
+### Role-Based Access Control (RBAC)
+
+- **ADMIN** – Manage Categories, Block/Unblock Users, View All Orders, Manage all Inventory.
+- **SELLER** – Create/Update/Delete own Medicines, Track own Sales, View Orders, Update Order Status.
+- **CUSTOMER** – Browse Medicines, Manage Profile, Cart, Place Orders, Track Status, Leave Reviews.
+
+---
+
+## 🔒 Security Considerations
+
+- Atomic Transactions: Stock is decremented using prisma.$transaction to prevent over-selling.
+- Price Integrity: Order totals are validated against DB prices to prevent frontend price manipulation.
+- Unique Constraints: @@unique([name, brand]) prevents duplicate catalog entries.
+- Security Headers: Better Auth handles secure cookie management and session validation.
+
+---
+
 ## 🗄️ Database Schema
 
 **ERD Link:** [ERD Link](https://drawsql.app/teams/lazy-programmer-2/diagrams/medi-store)
@@ -110,33 +137,6 @@ This backend system facilitates a structured medical marketplace:
 | customerId | String (foreign key) |
 | medicineId | String (foreign key) |
 | createdAt  | Record creation time |
-
----
-
-## 🔐 Authentication & Authorization
-
-### Better Auth Integration
-
-The system has moved away from manual JWT handling to Better Auth, providing:
-
-1. Session Management: Secure server-side sessions.
-2. Role Injection: User roles are baked into the session metadata.
-3. Cross-Origin Security: Built-in protection against CSRF and session hijacking.
-
-### Role-Based Access Control (RBAC)
-
-- **ADMIN** – Manage Categories, Block/Unblock Users, View All Orders, Manage all Inventory.
-- **SELLER** – Create/Update/Delete own Medicines, Track own Sales, View Orders, Update Order Status.
-- **CUSTOMER** – Browse Medicines, Manage Profile, Cart, Place Orders, Track Status, Leave Reviews.
-
----
-
-## 🔒 Security Considerations
-
-- Atomic Transactions: Stock is decremented using prisma.$transaction to prevent over-selling.
-- Price Integrity: Order totals are validated against DB prices to prevent frontend price manipulation.
-- Unique Constraints: @@unique([name, brand]) prevents duplicate catalog entries.
-- Security Headers: Better Auth handles secure cookie management and session validation.
 
 ---
 

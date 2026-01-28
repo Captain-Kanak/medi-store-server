@@ -2,6 +2,18 @@ import { AppError } from "@/src/utils/AppError";
 import { NextFunction, Request, Response } from "express";
 import { orderService } from "./order.service";
 
+const getOrders = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await orderService.getOrders();
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+
+    next(error);
+  }
+};
+
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
   const { totalPrice, shippingAddress, paymentMethod, items } = req.body;
@@ -60,6 +72,7 @@ const updateOrderStatus = async (
 };
 
 export const orderController = {
+  getOrders,
   createOrder,
   updateOrderStatus,
 };

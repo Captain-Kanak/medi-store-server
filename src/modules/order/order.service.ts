@@ -9,6 +9,42 @@ interface Order {
   items: Prisma.OrderItemCreateManyOrderInput[];
 }
 
+const getOrders = async () => {
+  try {
+    const result = await prisma.order.findMany({
+      include: {
+        items: {
+          include: {
+            medicine: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!result.length) {
+      return {
+        success: true,
+        message: "No orders found",
+        data: result,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Orders fetched successfully",
+      data: result,
+    };
+  } catch (error) {
+    console.log(error);
+
+    throw new AppError("Failed to get orders", 500);
+  }
+};
+
 const createOrder = async (payload: Order, customerId: string) => {
   const { totalPrice, shippingAddress, paymentMethod, items } = payload;
   try {
@@ -76,12 +112,14 @@ const updateOrderStatus = async (
   try {
     const isSeller = user.role === UserRoles.SELLER;
 
-    console.log({ user, isSeller });
-
-    const order = await prisma.order.findUniqueOrThrow({
+    const order = await prisma.order.findUnique({
       where: { id },
       select: { status: true, customerId: true },
     });
+
+    if (!order) {
+      throw new AppError("Order not found", 404);
+    }
 
     if (order.status !== OrderStatus.PENDING && !isSeller) {
       throw new AppError("Order already processed", 400);
@@ -113,6 +151,7 @@ const updateOrderStatus = async (
 };
 
 export const orderService = {
+  getOrders,
   createOrder,
   updateOrderStatus,
 };

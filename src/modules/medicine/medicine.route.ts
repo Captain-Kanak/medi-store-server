@@ -21,10 +21,10 @@ router.patch(
   medicineController.updateMedicine,
 );
 
-// router.delete(
-//   "/:id",
-//   authMiddleware(UserRoles.SELLER),
-//   medicineController.deleteMedicine,
-// );
+router.delete(
+  "/:id",
+  authMiddleware(UserRoles.SELLER),
+  medicineController.deleteMedicine,
+);
 
 export { router as medicineRouter };

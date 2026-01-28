@@ -226,9 +226,23 @@ const updateMedicine = async (
   }
 };
 
+const deleteMedicine = async (id: string, sellerId: string) => {
+  try {
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError("Failed to delete medicine", 500);
+  }
+};
+
 export const medicineService = {
   addMedicine,
   getMedicines,
   getMedicine,
   updateMedicine,
+  deleteMedicine,
 };

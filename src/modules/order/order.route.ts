@@ -5,6 +5,8 @@ import { UserRoles } from "@prisma/client";
 
 const router: Router = Router();
 
+router.get("/", authMiddleware(UserRoles.ADMIN), orderController.getOrders);
+
 router.post(
   "/",
   authMiddleware(UserRoles.CUSTOMER),
