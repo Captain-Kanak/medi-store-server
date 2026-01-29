@@ -16,6 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const auth = betterAuth({
+  baseURL: envConfig.better_auth_url as string,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
@@ -157,6 +158,12 @@ export const auth = betterAuth({
         console.error("Error sending verification email:", error);
         throw new Error("Could not send verification email");
       }
+    },
+  },
+  socialProviders: {
+    google: {
+      clientId: envConfig.google_client_id as string,
+      clientSecret: envConfig.google_client_secret as string,
     },
   },
 });
