@@ -4,7 +4,6 @@ import { paginationHelper } from "../../utils/paginationHelper.js";
 import { sortingHelper } from "../../utils/sortingHelper.js";
 import { AppError } from "../../utils/AppError.js";
 
-
 const addMedicine = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
   const {
@@ -56,10 +55,8 @@ const getMedicines = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { search, page, limit, price, sortBy, sortOrder, categoryId } =
-    req.query;
+  const { search, page, limit, sortBy, sortOrder, categoryId } = req.query;
   const trimmedSearch = search ? (search as string).trim() : "";
-  const numberPrice = price ? Number(price) : 0;
 
   try {
     const pagination = paginationHelper({
@@ -77,7 +74,6 @@ const getMedicines = async (
       offset: pagination.offset,
       search: trimmedSearch as string,
       categoryId: categoryId as string,
-      price: numberPrice as number,
       sortBy: sorting.sortBy,
       sortOrder: sorting.sortOrder,
     });

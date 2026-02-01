@@ -8,7 +8,6 @@ interface QueryInput {
   offset: number;
   search?: string;
   categoryId?: string;
-  price?: number;
   sortBy: string;
   sortOrder: "asc" | "desc";
 }
@@ -48,7 +47,6 @@ const getMedicines = async ({
   offset,
   search,
   categoryId,
-  price,
   sortBy,
   sortOrder,
 }: QueryInput) => {
@@ -77,14 +75,6 @@ const getMedicines = async ({
             },
           },
         ],
-      });
-    }
-
-    if (price) {
-      andConditions.push({
-        price: {
-          gte: price,
-        },
       });
     }
 
