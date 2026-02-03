@@ -1,4 +1,3 @@
-
 import type { User } from "@prisma/client";
 import { OrderStatus, Prisma, UserRoles } from "@prisma/client";
 import { prisma } from "../../lib/prisma.js";
@@ -48,9 +47,13 @@ const getOrders = async () => {
 };
 
 const createOrder = async (payload: Order, customerId: string) => {
-  const { totalPrice, shippingAddress, paymentMethod, items } = payload;
+  const { shippingAddress, paymentMethod, items } = payload;
   try {
     const result = await prisma.$transaction(async (trx) => {
+      const totalPrice = items.reduce((acc, item) => {
+        return acc + item.quantity * item.price;
+      }, 0);
+
       const order = await trx.order.create({
         data: {
           totalPrice,

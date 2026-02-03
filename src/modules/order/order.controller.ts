@@ -16,13 +16,13 @@ const getOrders = async (req: Request, res: Response, next: NextFunction) => {
 
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
-  const { totalPrice, shippingAddress, paymentMethod, items } = req.body;
+  const { shippingAddress, paymentMethod, items } = req.body;
   try {
     if (!user) {
       throw new AppError("Unauthorized", 401);
     }
 
-    if (!totalPrice || !shippingAddress || !paymentMethod || !items.length) {
+    if (!shippingAddress || !paymentMethod || !items.length) {
       throw new AppError("All fields are required", 400);
     }
 
