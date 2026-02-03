@@ -14,6 +14,7 @@ model Medicine {
     seller      User        @relation(fields: [sellerId], references: [id])
     orderItems  OrderItem[]
     reviews     Review[]
+    cartItems   CartItem[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

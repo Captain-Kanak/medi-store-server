@@ -19,6 +19,7 @@ model User {
     medicines     Medicine[]
     orders        Order[]
     reviews       Review[]
+    cartItems     CartItem[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
