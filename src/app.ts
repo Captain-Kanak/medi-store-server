@@ -10,6 +10,7 @@ import errorHandler from "./middleware/error-handler.js";
 import { categoryRouter } from "./modules/category/category.route.js";
 import { orderRouter } from "./modules/order/order.route.js";
 import { reviewRouter } from "./modules/review/review.route.js";
+import { cartRouter } from "./modules/cart/cart.route.js";
 
 const app: Application = express();
 
@@ -42,6 +43,8 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use("/api/categories", categoryRouter);
 
 app.use("/api/medicines", medicineRouter);
+
+app.use("/api/carts", cartRouter);
 
 app.use("/api/orders", orderRouter);
 
