@@ -7,10 +7,41 @@ interface AddToCartInput {
   quantity: number;
 }
 
+const getCart = async (userId: string) => {
+  try {
+    const items = await prisma.cartItem.findMany({
+      where: { userId },
+      include: {
+        medicine: true,
+      },
+    });
+
+    return {
+      success: true,
+      data: items,
+    };
+  } catch (error) {
+    console.error(error);
+
+    throw new AppError("Failed to fetch cart", 500);
+  }
+};
+
 const addToCart = async ({ userId, medicineId, quantity }: AddToCartInput) => {
   try {
-    const result = await prisma.cartItem.create({
-      data: {
+    const result = await prisma.cartItem.upsert({
+      where: {
+        userId_medicineId: {
+          userId,
+          medicineId,
+        },
+      },
+      update: {
+        quantity: {
+          increment: quantity,
+        },
+      },
+      create: {
         userId,
         medicineId,
         quantity,
@@ -94,6 +125,7 @@ const deleteCart = async ({
 };
 
 export const cartService = {
+  getCart,
   addToCart,
   updateCart,
   deleteCart,

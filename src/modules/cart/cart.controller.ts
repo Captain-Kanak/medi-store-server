@@ -2,6 +2,27 @@ import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../utils/AppError.js";
 import { cartService } from "./cart.service.js";
 
+const getCart = async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user;
+  try {
+    if (!user) {
+      throw new AppError("Unauthorized", 401);
+    }
+
+    const result = await cartService.getCart(user.id as string);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    next(error);
+  }
+};
+
 const addToCart = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
   const { medicineId, quantity } = req.body;
@@ -18,7 +39,7 @@ const addToCart = async (req: Request, res: Response, next: NextFunction) => {
     const result = await cartService.addToCart({
       userId: user.id as string,
       medicineId,
-      quantity,
+      quantity: Number(quantity),
     });
 
     return res.status(201).json(result);
@@ -93,6 +114,7 @@ const deleteCart = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const cartController = {
+  getCart,
   addToCart,
   updateCart,
   deleteCart,

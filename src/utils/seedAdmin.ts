@@ -4,8 +4,8 @@ import { prisma } from "../lib/prisma.js";
 async function seedAdmin() {
   try {
     const adminData = {
-      name: "Kanak Ray",
-      email: "kanakroy835@gmail.com",
+      name: "Admin",
+      email: "admin@gmail.com",
       password: "admin123",
       role: UserRoles.ADMIN,
     };
