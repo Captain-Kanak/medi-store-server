@@ -55,7 +55,7 @@ export const auth = betterAuth({
       try {
         const verificationUrl = `${envConfig.origin_url}/verify-email?token=${token}`;
 
-        const info = await transporter.sendMail({
+        await transporter.sendMail({
           from: '"Medi Store" <support@medi-store.com>',
           to: user.email,
           subject: "Please verify your email",
@@ -99,7 +99,7 @@ export const auth = betterAuth({
 
                               <div style="text-align: center; margin: 30px 0;">
                                 <a
-                                  href="${verificationUrl}"
+                                  href="${url}"
                                   style="
                                     background-color: #4f46e5;
                                     color: #ffffff;
@@ -119,7 +119,7 @@ export const auth = betterAuth({
                               </p>
 
                               <p style="word-break: break-all; color: #4f46e5;">
-                                ${url}
+                                ${verificationUrl}
                               </p>
 
                               <p style="margin-top: 30px;">

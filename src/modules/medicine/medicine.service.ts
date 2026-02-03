@@ -4,6 +4,7 @@ import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/AppError.js";
 
 interface QueryInput {
+  page: number;
   limit: number;
   offset: number;
   search?: string;
@@ -43,6 +44,7 @@ const addMedicine = async (payload: Omit<Medicine, "id">, sellerId: string) => {
 };
 
 const getMedicines = async ({
+  page,
   limit,
   offset,
   search,
@@ -123,12 +125,12 @@ const getMedicines = async ({
     return {
       success: true,
       message: "Medicines fetched successfully",
-      total: result.length,
       data: result,
       pagination: {
         limit,
         offset,
         total,
+        currentPage: page,
         totalPage: Math.ceil(total / limit),
       },
     };

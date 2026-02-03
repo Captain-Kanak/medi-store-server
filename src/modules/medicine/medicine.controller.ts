@@ -70,6 +70,7 @@ const getMedicines = async (
     });
 
     const result = await medicineService.getMedicines({
+      page: pagination.page,
       limit: pagination.limit,
       offset: pagination.offset,
       search: trimmedSearch as string,
