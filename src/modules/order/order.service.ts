@@ -69,6 +69,7 @@ const createOrder = async (payload: Order, customerId: string) => {
         }
 
         calculatedTotalPrice += medicine.price * item.quantity;
+        item.price = medicine.price;
 
         await trx.medicine.update({
           where: { id: item.medicineId },
@@ -91,8 +92,7 @@ const createOrder = async (payload: Order, customerId: string) => {
             create: items.map((item) => ({
               medicineId: item.medicineId,
               quantity: item.quantity,
-              price:
-                items.find((i) => i.medicineId === item.medicineId)?.price || 0,
+              price: item.price,
             })),
           },
         },

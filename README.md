@@ -102,6 +102,15 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 | createdAt   | Record creation time |
 | updatedAt   | Last update time     |
 
+### CartItem
+
+| Field      | Description          |
+| ---------- | -------------------- |
+| id         | UUID (primary key)   |
+| userId     | String (foreign key) |
+| medicineId | String (foreign key) |
+| quantity   | Int (required)       |
+
 ### Order
 
 | Field           | Description                                            |
@@ -171,6 +180,15 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 | DELETE | /api/medicines/:id | SELLER / ADMIN | Delete Medicine by id |
 
 ---
+
+### Cart
+
+| Method | Endpoint   | Access   | Description              |
+| ------ | ---------- | -------- | ------------------------ |
+| GET    | /api/carts | CUSTOMER | Get all Cart Items       |
+| POST   | /api/carts | CUSTOMER | Add to Cart (upsert)     |
+| PATCH  | /api/carts | CUSTOMER | Update Medicine Quantity |
+| DELETE | /api/carts | CUSTOMER | Delete Cart Item         |
 
 ### Order
 
