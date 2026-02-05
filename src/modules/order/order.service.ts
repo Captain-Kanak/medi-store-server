@@ -4,8 +4,8 @@ import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/AppError.js";
 
 interface Order {
-  totalPrice: number;
   shippingAddress: string;
+  phone: string;
   paymentMethod: string;
   items: Prisma.OrderItemCreateManyOrderInput[];
 }
@@ -47,38 +47,28 @@ const getOrders = async () => {
 };
 
 const createOrder = async (payload: Order, customerId: string) => {
-  const { shippingAddress, paymentMethod, items } = payload;
+  const { shippingAddress, phone, paymentMethod, items } = payload;
   try {
     const result = await prisma.$transaction(async (trx) => {
-      const totalPrice = items.reduce((acc, item) => {
-        return acc + item.quantity * item.price;
-      }, 0);
-
-      const order = await trx.order.create({
-        data: {
-          totalPrice,
-          shippingAddress,
-          paymentMethod,
-          customerId,
-          items: {
-            createMany: {
-              data: items,
-            },
-          },
-        },
-        include: {
-          items: true,
-        },
-      });
+      let calculatedTotalPrice = 0;
 
       for (const item of items) {
         const medicine = await trx.medicine.findUnique({
           where: { id: item.medicineId },
         });
 
-        if (!medicine || medicine.stock < item.quantity) {
-          throw new AppError(`Insufficient stock for ${medicine?.name}`, 400);
+        if (!medicine) {
+          throw new AppError(
+            `Medicine with ID ${item.medicineId} not found`,
+            404,
+          );
         }
+
+        if (medicine.stock < item.quantity) {
+          throw new AppError(`Insufficient stock for ${medicine.name}`, 400);
+        }
+
+        calculatedTotalPrice += medicine.price * item.quantity;
 
         await trx.medicine.update({
           where: { id: item.medicineId },
@@ -89,6 +79,33 @@ const createOrder = async (payload: Order, customerId: string) => {
           },
         });
       }
+
+      const order = await trx.order.create({
+        data: {
+          totalPrice: calculatedTotalPrice,
+          shippingAddress,
+          phone,
+          paymentMethod,
+          customerId,
+          items: {
+            create: items.map((item) => ({
+              medicineId: item.medicineId,
+              quantity: item.quantity,
+              price:
+                items.find((i) => i.medicineId === item.medicineId)?.price || 0,
+            })),
+          },
+        },
+        include: {
+          items: true,
+        },
+      });
+
+      await trx.cartItem.deleteMany({
+        where: {
+          userId: customerId,
+        },
+      });
 
       return order;
     });

@@ -11,6 +11,7 @@ model Order {
     totalPrice      Float
     status          OrderStatus @default(PENDING)
     shippingAddress String
+    phone           String
     paymentMethod   String      @default("Cash on Delivery")
     customerId      String
     customer        User        @relation(fields: [customerId], references: [id])
