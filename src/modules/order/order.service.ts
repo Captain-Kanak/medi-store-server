@@ -10,29 +10,54 @@ interface Order {
   items: Prisma.OrderItemCreateManyOrderInput[];
 }
 
-const getOrders = async () => {
+const getOrders = async (user: User) => {
   try {
+    let whereCondition = {};
+
+    if (user.role === UserRoles.CUSTOMER) {
+      whereCondition = { customerId: user.id };
+    }
+
+    if (user.role === UserRoles.SELLER) {
+      whereCondition = {
+        items: {
+          some: {
+            medicine: {
+              sellerId: user.id,
+            },
+          },
+        },
+      };
+    }
+
     const result = await prisma.order.findMany({
+      where: whereCondition,
       include: {
+        customer: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
         items: {
           include: {
             medicine: {
-              select: {
-                name: true,
+              include: {
+                seller: {
+                  select: {
+                    name: true,
+                    email: true,
+                  },
+                },
               },
             },
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
-
-    if (!result.length) {
-      return {
-        success: true,
-        message: "No orders found",
-        data: result,
-      };
-    }
 
     return {
       success: true,
@@ -41,7 +66,6 @@ const getOrders = async () => {
     };
   } catch (error) {
     console.log(error);
-
     throw new AppError("Failed to get orders", 500);
   }
 };
@@ -136,7 +160,9 @@ const updateOrderStatus = async (
 
     const order = await prisma.order.findUnique({
       where: { id },
-      select: { status: true, customerId: true },
+      include: {
+        items: true,
+      },
     });
 
     if (!order) {
@@ -151,9 +177,24 @@ const updateOrderStatus = async (
       throw new AppError("You are not authorized to update this order", 403);
     }
 
-    const result = await prisma.order.update({
-      where: { id },
-      data: { status },
+    const result = await prisma.$transaction(async (tx) => {
+      const updatedOrder = await tx.order.update({
+        where: { id },
+        data: { status },
+      });
+
+      if (status === OrderStatus.CANCELLED) {
+        for (const item of order.items) {
+          await tx.medicine.update({
+            where: { id: item.medicineId },
+            data: {
+              stock: { increment: item.quantity },
+            },
+          });
+        }
+      }
+
+      return updatedOrder;
     });
 
     return {

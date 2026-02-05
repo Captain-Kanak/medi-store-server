@@ -5,7 +5,7 @@ import { authMiddleware } from "../../middleware/authMiddleware.js";
 
 const router: Router = Router();
 
-router.get("/", authMiddleware(UserRoles.ADMIN), orderController.getOrders);
+router.get("/", authMiddleware(), orderController.getOrders);
 
 router.post(
   "/",

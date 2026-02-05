@@ -1,10 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
 import { orderService } from "./order.service.js";
 import { AppError } from "../../utils/AppError.js";
+import { User } from "@prisma/client";
 
 const getOrders = async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user;
   try {
-    const result = await orderService.getOrders();
+    const result = await orderService.getOrders(user as User);
 
     return res.status(200).json(result);
   } catch (error) {
