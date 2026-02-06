@@ -5,7 +5,7 @@ import { cartController } from "./cart.controller.js";
 
 const router: Router = Router();
 
-router.get("/", authMiddleware(UserRoles.CUSTOMER), cartController.getCart);
+router.get("/", authMiddleware(), cartController.getCart);
 
 router.post("/", authMiddleware(UserRoles.CUSTOMER), cartController.addToCart);
 

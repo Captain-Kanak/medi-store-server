@@ -7,6 +7,8 @@ const router: Router = Router();
 
 router.get("/", authMiddleware(), orderController.getOrders);
 
+router.get("/metrics", authMiddleware(), orderController.getOrderMetrics);
+
 router.post(
   "/",
   authMiddleware(UserRoles.CUSTOMER),

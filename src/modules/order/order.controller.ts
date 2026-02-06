@@ -16,6 +16,31 @@ const getOrders = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getOrderMetrics = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const user = req.user;
+  try {
+    if (!user) {
+      throw new AppError("Unauthorized", 401);
+    }
+
+    const result = await orderService.getOrderMetrics(user as User);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    next(error);
+  }
+};
+
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
   const { shippingAddress, phone, paymentMethod, items } = req.body;
@@ -75,6 +100,7 @@ const updateOrderStatus = async (
 
 export const orderController = {
   getOrders,
+  getOrderMetrics,
   createOrder,
   updateOrderStatus,
 };
