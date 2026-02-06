@@ -43,6 +43,7 @@ const getOrders = async (user: User, queryInput: OrderQueryInput) => {
       include: {
         customer: {
           select: {
+            id: true,
             name: true,
             email: true,
           },
@@ -53,6 +54,7 @@ const getOrders = async (user: User, queryInput: OrderQueryInput) => {
               include: {
                 seller: {
                   select: {
+                    id: true,
                     name: true,
                     email: true,
                   },
@@ -140,8 +142,9 @@ const getOrderMetrics = async (user: User) => {
         totalOrders: aggregates._count.id || 0,
         totalRevenue: totalRevenue,
         pending: statusMap[OrderStatus.PENDING] || 0,
-        delivered: statusMap[OrderStatus.DELIVERED] || 0,
         processing: statusMap[OrderStatus.PROCESSING] || 0,
+        shipped: statusMap[OrderStatus.SHIPPED] || 0,
+        delivered: statusMap[OrderStatus.DELIVERED] || 0,
         cancelled: statusMap[OrderStatus.CANCELLED] || 0,
       },
     };

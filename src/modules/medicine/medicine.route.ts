@@ -13,6 +13,12 @@ router.post(
 
 router.get("/", medicineController.getMedicines);
 
+router.get(
+  "/seller",
+  authMiddleware(UserRoles.SELLER),
+  medicineController.getSellerMedicines,
+);
+
 router.get("/:id", medicineController.getMedicine);
 
 router.patch(

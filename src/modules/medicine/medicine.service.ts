@@ -100,15 +100,18 @@ const getMedicines = async ({
       include: {
         seller: {
           select: {
+            id: true,
             name: true,
             email: true,
           },
         },
         category: {
           select: {
+            id: true,
             name: true,
           },
         },
+        reviews: true,
       },
     });
 
@@ -120,7 +123,11 @@ const getMedicines = async ({
       };
     }
 
-    const total = await prisma.medicine.count();
+    const total = await prisma.medicine.count({
+      where: {
+        AND: andConditions,
+      },
+    });
 
     return {
       success: true,
@@ -141,6 +148,73 @@ const getMedicines = async ({
   }
 };
 
+const getSellerMedicines = async (
+  sellerId: string,
+  { page, limit, offset }: { page: number; limit: number; offset: number },
+) => {
+  try {
+    const result = await prisma.medicine.findMany({
+      skip: offset,
+      take: limit,
+      where: {
+        sellerId,
+      },
+      include: {
+        seller: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        reviews: true,
+      },
+    });
+
+    if (!result.length) {
+      return {
+        success: true,
+        message: "No medicines found",
+        data: result,
+      };
+    }
+
+    const total = await prisma.medicine.count({
+      where: {
+        sellerId,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Seller medicines fetched successfully",
+      data: result,
+      pagination: {
+        limit,
+        offset,
+        total,
+        currentPage: page,
+        totalPage: Math.ceil(total / limit),
+      },
+    };
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError("Failed to get seller medicines", 500);
+  }
+};
+
 const getMedicine = async (id: string) => {
   try {
     const result = await prisma.medicine.findUnique({
@@ -148,15 +222,19 @@ const getMedicine = async (id: string) => {
       include: {
         seller: {
           select: {
+            id: true,
             name: true,
             email: true,
+            image: true,
           },
         },
         category: {
           select: {
+            id: true,
             name: true,
           },
         },
+        reviews: true,
       },
     });
 
@@ -271,6 +349,7 @@ const deleteMedicine = async (id: string, user: User) => {
 export const medicineService = {
   addMedicine,
   getMedicines,
+  getSellerMedicines,
   getMedicine,
   updateMedicine,
   deleteMedicine,

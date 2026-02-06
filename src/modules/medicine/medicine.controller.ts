@@ -87,6 +87,41 @@ const getMedicines = async (
   }
 };
 
+const getSellerMedicines = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const user = req.user;
+  const { page, limit } = req.query;
+  try {
+    if (!user) {
+      throw new AppError("Unauthorized", 401);
+    }
+
+    const pagination = paginationHelper({
+      page: page as string,
+      limit: limit as string,
+    });
+
+    const result = await medicineService.getSellerMedicines(user.id, {
+      page: pagination.page,
+      limit: pagination.limit,
+      offset: pagination.offset,
+    });
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    next(error);
+  }
+};
+
 const getMedicine = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   try {
@@ -156,6 +191,7 @@ const deleteMedicine = async (
 export const medicineController = {
   addMedicine,
   getMedicines,
+  getSellerMedicines,
   getMedicine,
   updateMedicine,
   deleteMedicine,
