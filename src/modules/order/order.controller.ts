@@ -2,11 +2,22 @@ import type { NextFunction, Request, Response } from "express";
 import { orderService } from "./order.service.js";
 import { AppError } from "../../utils/AppError.js";
 import { User } from "@prisma/client";
+import { paginationHelper } from "../../utils/paginationHelper.js";
 
 const getOrders = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
+  const { page, limit } = req.query;
   try {
-    const result = await orderService.getOrders(user as User);
+    const pagination = paginationHelper({
+      page: page as string,
+      limit: limit as string,
+    });
+
+    const result = await orderService.getOrders(user as User, {
+      page: pagination.page,
+      limit: pagination.limit,
+      offset: pagination.offset,
+    });
 
     return res.status(200).json(result);
   } catch (error) {

@@ -10,7 +10,13 @@ interface Order {
   items: Prisma.OrderItemCreateManyOrderInput[];
 }
 
-const getOrders = async (user: User) => {
+interface OrderQueryInput {
+  page: number;
+  limit: number;
+  offset: number;
+}
+
+const getOrders = async (user: User, queryInput: OrderQueryInput) => {
   try {
     let whereCondition = {};
 
@@ -31,6 +37,8 @@ const getOrders = async (user: User) => {
     }
 
     const result = await prisma.order.findMany({
+      skip: queryInput.offset,
+      take: queryInput.limit,
       where: whereCondition,
       include: {
         customer: {
@@ -59,10 +67,19 @@ const getOrders = async (user: User) => {
       },
     });
 
+    const total = await prisma.order.count();
+
     return {
       success: true,
       message: "Orders fetched successfully",
       data: result,
+      pagination: {
+        limit: queryInput.limit,
+        offset: queryInput.offset,
+        total,
+        currentPage: queryInput.page,
+        totalPage: Math.ceil(total / queryInput.limit),
+      },
     };
   } catch (error) {
     console.log(error);
