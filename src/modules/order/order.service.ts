@@ -107,11 +107,7 @@ const getOrderMetrics = async (user: User) => {
 
     const [aggregates, statusCounts] = await Promise.all([
       prisma.order.aggregate({
-        where: {
-          ...whereCondition,
-          status: { not: OrderStatus.CANCELLED },
-        },
-        _sum: { totalPrice: true },
+        where: whereCondition,
         _count: { id: true },
       }),
 
@@ -119,12 +115,19 @@ const getOrderMetrics = async (user: User) => {
         by: ["status"],
         where: whereCondition,
         _count: { _all: true },
+        _sum: { totalPrice: true },
       }),
     ]);
 
+    let totalRevenue = 0;
     const statusMap = statusCounts.reduce(
       (acc, curr) => {
         acc[curr.status] = curr._count._all;
+
+        if (curr.status !== OrderStatus.CANCELLED) {
+          totalRevenue += curr._sum.totalPrice || 0;
+        }
+
         return acc;
       },
       {} as Record<string, number>,
@@ -135,7 +138,7 @@ const getOrderMetrics = async (user: User) => {
       message: "Order metrics fetched successfully",
       data: {
         totalOrders: aggregates._count.id || 0,
-        totalRevenue: aggregates._sum.totalPrice || 0,
+        totalRevenue: totalRevenue,
         pending: statusMap[OrderStatus.PENDING] || 0,
         delivered: statusMap[OrderStatus.DELIVERED] || 0,
         processing: statusMap[OrderStatus.PROCESSING] || 0,
@@ -144,11 +147,7 @@ const getOrderMetrics = async (user: User) => {
     };
   } catch (error) {
     console.log(error);
-
-    if (error instanceof AppError) {
-      throw error;
-    }
-
+    if (error instanceof AppError) throw error;
     throw new AppError("Failed to get order metrics", 500);
   }
 };
