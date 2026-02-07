@@ -14,7 +14,7 @@ model Order {
     phone           String
     paymentMethod   String      @default("Cash on Delivery")
     customerId      String
-    customer        User        @relation(fields: [customerId], references: [id])
+    customer        User        @relation(fields: [customerId], references: [id], onDelete: Cascade)
     items           OrderItem[]
 
     createdAt DateTime @default(now())
@@ -30,7 +30,7 @@ model OrderItem {
     orderId    String
     order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
     medicineId String
-    medicine   Medicine @relation(fields: [medicineId], references: [id])
+    medicine   Medicine @relation(fields: [medicineId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

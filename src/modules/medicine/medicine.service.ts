@@ -19,7 +19,6 @@ interface MedicineUpdateInput {
   description?: string;
   image?: string;
   expiryDate?: Date;
-  categoryId?: string;
 }
 
 const addMedicine = async (payload: Omit<Medicine, "id">, sellerId: string) => {
@@ -267,8 +266,7 @@ const updateMedicine = async (
 ) => {
   try {
     const isAdmin = user.role === UserRoles.ADMIN;
-    const { price, stock, description, image, expiryDate, categoryId } =
-      payload;
+    const { price, stock, description, image, expiryDate } = payload;
 
     const medicine = await prisma.medicine.findUnique({
       where: { id },
@@ -290,7 +288,6 @@ const updateMedicine = async (
         ...(description && { description }),
         ...(image && { image }),
         ...(expiryDate && { expiryDate }),
-        ...(categoryId && { categoryId }),
       },
     });
 

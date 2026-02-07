@@ -206,7 +206,7 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 | Method | Endpoint         | Access   | Description               |
 | ------ | ---------------- | -------- | ------------------------- |
 | POST   | /api/reviews     | CUSTOMER | Leave Review for Medicine |
-| PATCH  | /api/reviews/:id | CUSTOMER | Update Review by id       |
+<!-- | PATCH  | /api/reviews/:id | CUSTOMER | Update Review by id       | -->
 
 ---
 
