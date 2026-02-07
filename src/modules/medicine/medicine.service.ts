@@ -158,6 +158,11 @@ const getSellerMedicines = async (
       where: {
         sellerId,
       },
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
       include: {
         seller: {
           select: {
