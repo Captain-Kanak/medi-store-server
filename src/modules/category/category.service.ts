@@ -63,7 +63,57 @@ const getCategories = async () => {
   }
 };
 
+const updateCategory = async (
+  id: string,
+  payload: { name?: string; description?: string },
+) => {
+  try {
+    const result = await prisma.category.update({
+      where: { id },
+      data: payload,
+    });
+
+    return {
+      success: true,
+      message: "Category updated successfully",
+      data: result,
+    };
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError("Failed to update category", 500);
+  }
+};
+
+const deleteCategory = async (id: string) => {
+  try {
+    const result = await prisma.category.delete({
+      where: { id },
+    });
+
+    return {
+      success: true,
+      message: "Category deleted successfully",
+      data: result,
+    };
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError("Failed to delete category", 500);
+  }
+};
+
 export const categoryService = {
   addCategory,
   getCategories,
+  updateCategory,
+  deleteCategory,
 };

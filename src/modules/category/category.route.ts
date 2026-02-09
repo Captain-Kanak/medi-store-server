@@ -13,4 +13,16 @@ router.post(
 
 router.get("/", categoryController.getCategories);
 
+router.patch(
+  "/:id",
+  authMiddleware(UserRoles.ADMIN),
+  categoryController.updateCategory,
+);
+
+router.delete(
+  "/:id",
+  authMiddleware(UserRoles.ADMIN),
+  categoryController.deleteCategory,
+);
+
 export { router as categoryRouter };
