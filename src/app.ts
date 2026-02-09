@@ -11,6 +11,7 @@ import { categoryRouter } from "./modules/category/category.route.js";
 import { orderRouter } from "./modules/order/order.route.js";
 import { reviewRouter } from "./modules/review/review.route.js";
 import { cartRouter } from "./modules/cart/cart.route.js";
+import { userRouter } from "./modules/user/user.route.js";
 
 const app: Application = express();
 
@@ -39,6 +40,8 @@ app.get("/api", (req: Request, res: Response) => {
 
 // ------ *** ------
 app.all("/api/auth/*splat", toNodeHandler(auth));
+
+app.use("/api/users", userRouter);
 
 app.use("/api/categories", categoryRouter);
 

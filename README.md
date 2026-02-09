@@ -160,6 +160,15 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 
 ---
 
+### User
+
+| Method | Endpoint   | Access                    | Description             |
+| ------ | ---------- | ------------------------- | ----------------------- |
+| GET    | /api/users | ADMIN                     | Get Users Metrics       |
+| PATCH  | /api/users | CUSTOMER / SELLER / ADMIN | Update User Information |
+
+---
+
 ### Category
 
 | Method | Endpoint        | Access | Description        |
@@ -203,10 +212,9 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 
 ### Review
 
-| Method | Endpoint         | Access   | Description               |
-| ------ | ---------------- | -------- | ------------------------- |
-| POST   | /api/reviews     | CUSTOMER | Leave Review for Medicine |
-<!-- | PATCH  | /api/reviews/:id | CUSTOMER | Update Review by id       | -->
+| Method | Endpoint     | Access   | Description               |
+| ------ | ------------ | -------- | ------------------------- |
+| POST   | /api/reviews | CUSTOMER | Leave Review for Medicine |
 
 ---
 
