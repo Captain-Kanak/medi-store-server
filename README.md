@@ -171,10 +171,12 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 
 ### Category
 
-| Method | Endpoint        | Access | Description        |
-| ------ | --------------- | ------ | ------------------ |
-| POST   | /api/categories | ADMIN  | Create Category    |
-| GET    | /api/categories | Public | Get all Categories |
+| Method | Endpoint        | Access | Description           |
+| ------ | --------------- | ------ | --------------------- |
+| POST   | /api/categories | ADMIN  | Create Category       |
+| GET    | /api/categories | Public | Get all Categories    |
+| PATCH  | /api/categories | ADMIN  | Update Category by Id |
+| DELETE | /api/categories | ADMIN  | Delete Category by Id |
 
 ---
 

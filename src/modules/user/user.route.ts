@@ -11,4 +11,6 @@ router.get(
   userController.getUsersMetrics,
 );
 
+router.patch("/", authMiddleware(), userController.updateProfile);
+
 export { router as userRouter };

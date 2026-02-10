@@ -2,6 +2,13 @@ import { UserRoles } from "@prisma/client";
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/AppError.js";
 
+interface ProfileUpdatePayload {
+  name?: string;
+  image?: string;
+  phone?: string;
+  address?: string;
+}
+
 const getUsersMetrics = async () => {
   try {
     const totalCustomers = await prisma.user.count({
@@ -37,6 +44,42 @@ const getUsersMetrics = async () => {
   }
 };
 
+const updateProfile = async (id: string, payload: ProfileUpdatePayload) => {
+  const { name, image, phone, address } = payload;
+  try {
+    const updatedUser = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        ...(name && { name }),
+        ...(image && { image }),
+        ...(phone && { phone }),
+        ...(address && { address }),
+      },
+    });
+
+    if (!updatedUser) {
+      throw new AppError("User not found", 404);
+    }
+
+    return {
+      success: true,
+      message: "Profile updated successfully",
+      data: updatedUser,
+    };
+  } catch (error) {
+    console.error("Error in updateProfile:", error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError("Failed to update profile", 500);
+  }
+};
+
 export const userService = {
   getUsersMetrics,
+  updateProfile,
 };
