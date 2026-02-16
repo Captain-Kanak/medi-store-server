@@ -17,10 +17,31 @@ const app: Application = express();
 
 app.use(express.json());
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  `${envConfig.origin_url}`,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: ["http://localhost:3000", `${envConfig.origin_url}`],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        /^https:\/\/next-blog-client.*\.vercel\.app$/.test(origin) ||
+        /^https:\/\/.*\.vercel\.app$/.test(origin);
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    exposedHeaders: ["Set-Cookie"],
   }),
 );
 

@@ -17,12 +17,19 @@ const transporter = nodemailer.createTransport({
 
 export const auth = betterAuth({
   baseURL: envConfig.better_auth_url,
-  cookie: {
-    name: "better_auth_session",
-    secure: true,
-    httpOnly: true,
-    sameSite: "none",
-    maxAge: 60 * 60 * 24 * 7,
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  },
+  advanced: {
+    cookiePrefix: "better_auth",
+    useSecureCookies: envConfig.NODE_ENV === "production",
+    crossSubDomainCookies: {
+      enabled: false,
+    },
+    disableCSRFCheck: true,
   },
   database: prismaAdapter(prisma, {
     provider: "postgresql",
