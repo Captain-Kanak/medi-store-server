@@ -16,11 +16,18 @@ const transporter = nodemailer.createTransport({
 });
 
 export const auth = betterAuth({
-  baseURL: envConfig.better_auth_url as string,
+  baseURL: envConfig.better_auth_url,
+  cookie: {
+    name: "better_auth_session",
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
+    maxAge: 60 * 60 * 24 * 7,
+  },
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-  trustedOrigins: [envConfig.origin_url as string, "http://localhost:3000"],
+  trustedOrigins: ["http://localhost:3000", envConfig.origin_url as string],
   user: {
     additionalFields: {
       role: {
@@ -164,6 +171,7 @@ export const auth = betterAuth({
     google: {
       clientId: envConfig.google_client_id as string,
       clientSecret: envConfig.google_client_secret as string,
+      callbackURL: `${envConfig.origin_url}/api/auth/google/callback`,
     },
   },
 });

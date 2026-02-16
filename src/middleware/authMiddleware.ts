@@ -7,7 +7,10 @@ export const authMiddleware = (...roles: UserRoles[]) => {
     try {
       // get user session
       const session = await auth.api.getSession({
-        headers: req.headers as Record<string, string>,
+        headers: {
+          cookie: req.headers.cookie ?? "",
+          authorization: req.headers.authorization ?? "",
+        },
       });
 
       // check session and user exists

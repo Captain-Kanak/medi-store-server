@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: [envConfig.origin_url as string, "http://localhost:3000"],
+    origin: ["http://localhost:3000", `${envConfig.origin_url}`],
     credentials: true,
   }),
 );
