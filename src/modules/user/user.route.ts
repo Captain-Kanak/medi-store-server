@@ -5,6 +5,8 @@ import { UserRoles } from "@prisma/client";
 
 const router: Router = Router();
 
+router.get("/", authMiddleware(), userController.getUser);
+
 router.get(
   "/metrics",
   authMiddleware(UserRoles.ADMIN),

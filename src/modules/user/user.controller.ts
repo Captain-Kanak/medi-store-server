@@ -2,6 +2,27 @@ import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../utils/AppError.js";
 import { userService } from "./user.service.js";
 
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user;
+  try {
+    if (!user) {
+      throw new AppError("Unauthorized", 401);
+    }
+
+    const result = await userService.getUser(user.id as string);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in getUser:", error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    next(error);
+  }
+};
+
 const getUsersMetrics = async (
   req: Request,
   res: Response,
@@ -50,6 +71,7 @@ const updateProfile = async (
 };
 
 export const userController = {
+  getUser,
   getUsersMetrics,
   updateProfile,
 };

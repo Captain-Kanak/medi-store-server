@@ -9,6 +9,34 @@ interface ProfileUpdatePayload {
   address?: string;
 }
 
+const getUser = async (id: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+
+    return {
+      success: true,
+      message: "User retrieved successfully",
+      data: user,
+    };
+  } catch (error) {
+    console.error("Error in getUser:", error);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError("Failed to get user", 500);
+  }
+};
+
 const getUsersMetrics = async () => {
   try {
     const totalCustomers = await prisma.user.count({
@@ -80,6 +108,7 @@ const updateProfile = async (id: string, payload: ProfileUpdatePayload) => {
 };
 
 export const userService = {
+  getUser,
   getUsersMetrics,
   updateProfile,
 };
