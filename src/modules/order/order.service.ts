@@ -158,28 +158,30 @@ const getOrderMetrics = async (user: User) => {
 const createOrder = async (payload: Order, customerId: string) => {
   const { shippingAddress, phone, paymentMethod, items } = payload;
   try {
+    let calculatedTotalPrice = 0;
+
+    for (const item of items) {
+      const medicine = await prisma.medicine.findUnique({
+        where: { id: item.medicineId },
+      });
+
+      if (!medicine) {
+        throw new AppError(
+          `Medicine with ID ${item.medicineId} not found`,
+          404,
+        );
+      }
+
+      if (medicine.stock < item.quantity) {
+        throw new AppError(`Insufficient stock for ${medicine.name}`, 400);
+      }
+
+      calculatedTotalPrice += medicine.price * item.quantity;
+      item.price = medicine.price;
+    }
+
     const result = await prisma.$transaction(async (trx) => {
-      let calculatedTotalPrice = 0;
-
       for (const item of items) {
-        const medicine = await trx.medicine.findUnique({
-          where: { id: item.medicineId },
-        });
-
-        if (!medicine) {
-          throw new AppError(
-            `Medicine with ID ${item.medicineId} not found`,
-            404,
-          );
-        }
-
-        if (medicine.stock < item.quantity) {
-          throw new AppError(`Insufficient stock for ${medicine.name}`, 400);
-        }
-
-        calculatedTotalPrice += medicine.price * item.quantity;
-        item.price = medicine.price;
-
         await trx.medicine.update({
           where: { id: item.medicineId },
           data: {
