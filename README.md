@@ -1,4 +1,4 @@
-# 🧩 Multi-Seller Medicine Store – SERVER
+# 🧩 Multi-Seller Medicines Store – SERVER
 
 A robust, multi-role e-commerce backend built for a specialized Pharmacy Marketplace. This system enables Admins to manage categories, Sellers to list medications, and Customers to purchase healthcare products and leave reviews for medicine with real-time stock management.
 
@@ -30,6 +30,8 @@ This backend system facilitates a structured medical marketplace:
 - Database: PostgreSQL (Neon DB)
 - ORM: Prisma
 - Authentication: Better Auth
+- Validation: Zod
+- Email Service: Nodemailer
 
 ---
 
