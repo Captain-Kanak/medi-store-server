@@ -1,28 +1,24 @@
-enum UserRoles {
-    ADMIN
-    SELLER
-    CUSTOMER
-}
-
 model User {
     id            String     @id
     name          String
     email         String
     emailVerified Boolean    @default(false)
     image         String?
-    role          String?    @default("CUSTOMER")
+    role          UserRole   @default(CUSTOMER)
     phone         String?
     address       String?
-    isBlocked     Boolean?   @default(false)
-    sessions      Session[]
-    accounts      Account[]
-    medicines     Medicine[]
-    orders        Order[]
-    reviews       Review[]
-    cartItems     CartItem[]
+    status        UserStatus @default(ACTIVE)
+    isDeleted     Boolean?   @default(false)
+    deletedAt     DateTime?
+    createdAt     DateTime   @default(now())
+    updatedAt     DateTime   @updatedAt
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    sessions  Session[]
+    accounts  Account[]
+    medicines Medicine[]
+    orders    Order[]
+    reviews   Review[]
+    cartItems CartItem[]
 
     @@unique([email])
     @@map("user")

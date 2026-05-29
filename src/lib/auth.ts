@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
 import { envConfig } from "../config/envConfig.js";
-import { UserRoles } from "@prisma/client";
+import { UserRole, UserStatus } from "@prisma/client";
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
@@ -39,7 +39,12 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         type: "string",
-        defaultValue: UserRoles.CUSTOMER,
+        defaultValue: UserRole.CUSTOMER,
+        required: false,
+      },
+      status: {
+        type: "string",
+        defaultValue: UserStatus.ACTIVE,
         required: false,
       },
       phone: {
@@ -48,11 +53,6 @@ export const auth = betterAuth({
       },
       address: {
         type: "string",
-        required: false,
-      },
-      isBlocked: {
-        type: "boolean",
-        defaultValue: false,
         required: false,
       },
     },
