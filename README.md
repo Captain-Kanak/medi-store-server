@@ -2,7 +2,9 @@
 
 A robust, multi-role e-commerce backend built for a specialized Pharmacy Marketplace. This system enables Admins to manage categories, Sellers to list medications, and Customers to purchase healthcare products and leave reviews for medicine with real-time stock management.
 
-**Live Server Link:** [Click Here](https://drawsql.app/teams/lazy-programmer-2/diagrams/medi-store)
+**Live Server Link:** [Click Here](https://medi-store-server-bice.vercel.app)
+**Live Link:** [Click Here](https://medi-store-app.vercel.app)
+**Client Repo Link:** [Click Here](https://github.com/Captain-Kanak/medi-store-app)
 
 ---
 
