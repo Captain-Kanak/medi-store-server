@@ -2,6 +2,8 @@
 
 A robust, multi-role e-commerce backend built for a specialized Pharmacy Marketplace. This system enables Admins to manage categories, Sellers to list medications, and Customers to purchase healthcare products and leave reviews for medicine with real-time stock management.
 
+**Live Server Link:** [Click Here](https://drawsql.app/teams/lazy-programmer-2/diagrams/medi-store)
+
 ---
 
 ## 📌 Overview
@@ -56,7 +58,7 @@ The system has moved away from manual JWT handling to Better Auth, providing:
 
 ## 🗄️ Database Schema
 
-**ERD Link:** [ERD Link](https://drawsql.app/teams/lazy-programmer-2/diagrams/medi-store)
+**ERD Link:** [Click Here](https://drawsql.app/teams/lazy-programmer-2/diagrams/medi-store)
 
 ### User
 
